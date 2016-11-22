@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/128 Instruction.unity
+- path: Assets/Scenes/Song Selection 1.unity
   isLoaded: 1
   isActive: 1
