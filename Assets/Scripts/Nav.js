@@ -4,6 +4,11 @@ import UnityEngine.EventSystems;
 import UnityEditor;
 
 var level = 0;
+var song = 0;
+
+var instruction = [
+	5, 5, 5, 6, 6, 6, 7, 8
+];
 
 function NextPage() {
 	Debug.Log("clicked");
@@ -32,6 +37,13 @@ function Update() {
 
 }
 
-function OnMouseDown() {
-	Debug.Log("clicked2");
+function InstructionScreen() {
+	Debug.Log("InstructionScreen");
+	var songObject = EventSystem.current.currentSelectedGameObject;
+	var songChoice = GameObject.Find("SongChoice");
+	var songChoiceScript = songChoice.GetComponent(SongChoice);
+	songChoiceScript.songChoice = song;
+	Debug.Log(songChoiceScript.songChoice);
+	songChoice.DontDestroyOnLoad(songChoice);
+	SceneManager.LoadScene(instruction[song]);
 }
