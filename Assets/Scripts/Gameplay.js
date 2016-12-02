@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 import System.IO;
+import UnityEngine.UI;
 
 var songLabels = [
     "HallelujahChorus_Labels.txt",
@@ -24,6 +25,34 @@ var songObjects = [
   "Nocturne"  
 ];
 
+var instruction = [
+	5, 5, 5, 6, 6, 6, 7, 8
+];
+
+var readyTimes = [
+	6.5,
+	7.5,
+	8.5,
+	14.5,
+	4.5,
+	8.5,
+	9.5,
+	6.5
+];
+
+var startTimes = [
+	6.6,
+	7.6,
+	8.6,
+	14.6,
+	4.6,
+	8.6,
+	9.6,
+	6.6
+];
+
+
+
 static var times : float[] = new float[248];
 static var audioSource : AudioSource;
 static var songIndex = -1;
@@ -41,39 +70,35 @@ function Start() {
 
 	if(gameObject.name.Contains("Start")) {
 		gameObject.GetComponent(Renderer).enabled = false;
-		switch(songIndex) {
-			case 0: StartCoroutine(ShowStart(6.6));	break;
-			case 1: StartCoroutine(ShowStart(7.6)); break;
-			case 2: StartCoroutine(ShowStart(8.6)); break;
-			case 3: StartCoroutine(ShowStart(14.6)); break;
-			case 4: StartCoroutine(ShowStart(4.6)); break;
-			case 5: StartCoroutine(ShowStart(8.6)); break;
-			case 6: StartCoroutine(ShowStart(9.6)); break;
-			case 7: StartCoroutine(ShowStart(6.6)); break;
-		}
+		StartCoroutine(ShowStart(startTimes[songIndex]));		
 		return;
 	}
 
 	else if(gameObject.name.Contains("Ready")) {
     	gameObject.SetActive(true);
-		switch(songIndex) {
-			case 0: StartCoroutine(ShowReady(6.5)); break;
-			case 1: StartCoroutine(ShowReady(7.5)); break;
-			case 2: StartCoroutine(ShowReady(8.5)); break;
-			case 3: StartCoroutine(ShowReady(14.5)); break;
-			case 4: StartCoroutine(ShowReady(4.5)); break;
-			case 5: StartCoroutine(ShowReady(8.5)); break;
-			case 6: StartCoroutine(ShowReady(9.5)); break;
-			case 7: StartCoroutine(ShowReady(6.5)); break;
-		}
-    return;
+		StartCoroutine(ShowReady(readyTimes[songIndex]));	
+    	return;
 	}
 
-  else if(songObjects.IndexOf(songObjects, gameObject.name) != -1) {
-    gameObject.GetComponent.<AudioSource>().Stop();
-    StartSong();
-  }
+	else if(songObjects.IndexOf(songObjects, gameObject.name) != -1) {
+		gameObject.GetComponent.<AudioSource>().Stop();
+		StartSong();
+  	}
 
+  	else if(gameObject.name.Contains("Resume")) {
+  		gameObject.GetComponent(Image).enabled = false;
+  		gameObject.GetComponent(Button).enabled = false;
+  	}
+
+  	else if(gameObject.name.Contains("Restart")) {
+  		gameObject.GetComponent(Image).enabled = false;
+  		gameObject.GetComponent(Button).enabled = false;
+  	}
+
+  	else if(gameObject.name.Contains("QuitSong")) {
+  		gameObject.GetComponent(Image).enabled = false;
+  		gameObject.GetComponent(Button).enabled = false;
+  	}
 
 }
 
@@ -146,7 +171,7 @@ function Read (songIndex: int) {
 }
 
 function Star(beatIndex: int) {
-    if (!audioSource.isPlaying)
+    if (!audioSource.isPlaying || audioSource.time < startTimes[songIndex])
         return;
       
     var mostRecentLabel = binaryIndexOf(audioSource.time);
@@ -193,4 +218,69 @@ function binaryIndexOf(searchTime : float) {
     }
  
     return -1;
+}
+
+function Update() {
+	if (Input.GetKeyDown("p") && audioSource.time > startTimes[songIndex]) {
+		Debug.Log("p");
+		var renderers : Renderer[] = FindObjectsOfType(Renderer) as Renderer[];
+		for(var renderer : Renderer in renderers) {
+			renderer.enabled = false;
+		}
+		var images : Image[] = FindObjectsOfType(Image) as Image[];
+		for(var image : Image in images) {
+			image.enabled = false;
+		}
+		var buttons : Button[] = FindObjectsOfType(Button) as Button[];
+		for(var button : Button in buttons) {
+			button.enabled = false;
+		}
+
+		gameObject.Find("Curtains").GetComponent(Renderer).enabled = true;
+		gameObject.Find("Restart").GetComponent(Image).enabled = true;
+		gameObject.Find("Restart").GetComponent(Button).enabled = true;
+		gameObject.Find("Resume").GetComponent(Image).enabled = true;
+		gameObject.Find("Resume").GetComponent(Button).enabled = true;
+		gameObject.Find("QuitSong").GetComponent(Image).enabled = true;
+		gameObject.Find("QuitSong").GetComponent(Button).enabled = true;
+
+		audioSource.Pause();
+
+	}
+}
+
+function Resume() {
+	Debug.Log("Resume");
+	var renderers : Renderer[] = FindObjectsOfType(Renderer) as Renderer[];
+	for(var renderer : Renderer in renderers) {
+		renderer.enabled = true;
+	}
+	var images : Image[] = FindObjectsOfType(Image) as Image[];
+	for(var image : Image in images) {
+		image.enabled = true;
+	}
+	var buttons : Button[] = FindObjectsOfType(Button) as Button[];
+	for(var button : Button in buttons) {
+		button.enabled = true;
+	}
+
+	gameObject.Find("Curtains").GetComponent(Renderer).enabled = true;
+	gameObject.Find("Ready").GetComponent(Renderer).enabled = false;
+	gameObject.Find("Start").GetComponent(Renderer).enabled = false;
+	gameObject.Find("Restart").GetComponent(Image).enabled = false;
+	gameObject.Find("Restart").GetComponent(Button).enabled = false;
+	gameObject.Find("Resume").GetComponent(Image).enabled = false;
+	gameObject.Find("Resume").GetComponent(Button).enabled = false;
+	gameObject.Find("QuitSong").GetComponent(Image).enabled = false;
+	gameObject.Find("QuitSong").GetComponent(Button).enabled = false;
+
+	audioSource.Play();
+}
+
+function QuitSong() {
+	SceneManager.LoadScene(1);
+}
+
+function Restart() {
+	SceneManager.LoadScene(instruction[songIndex]);
 }
