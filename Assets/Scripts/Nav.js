@@ -1,7 +1,6 @@
 ﻿#pragma strict
 import UnityEngine.SceneManagement;
 import UnityEngine.EventSystems;
-import UnityEditor;
 
 var level = 0;
 var song = 0;

@@ -2,7 +2,6 @@
 
 import UnityEngine.SceneManagement;
 import UnityEngine.EventSystems;
-import UnityEditor;
 
 var songIndex = 0;
 var songIndices = {
