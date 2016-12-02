@@ -41,13 +41,31 @@ function Start() {
 
 	if(gameObject.name.Contains("Start")) {
 		gameObject.GetComponent(Renderer).enabled = false;
-		StartCoroutine(ShowStart(2.0));
+		switch(songIndex) {
+			case 0: StartCoroutine(ShowStart(6.6));	break;
+			case 1: StartCoroutine(ShowStart(7.6)); break;
+			case 2: StartCoroutine(ShowStart(8.6)); break;
+			case 3: StartCoroutine(ShowStart(14.6)); break;
+			case 4: StartCoroutine(ShowStart(4.6)); break;
+			case 5: StartCoroutine(ShowStart(8.6)); break;
+			case 6: StartCoroutine(ShowStart(9.6)); break;
+			case 7: StartCoroutine(ShowStart(6.6)); break;
+		}
 		return;
 	}
 
 	else if(gameObject.name.Contains("Ready")) {
-    gameObject.SetActive(true);
-		StartCoroutine(ShowReady(2.0));
+    	gameObject.SetActive(true);
+		switch(songIndex) {
+			case 0: StartCoroutine(ShowReady(6.5)); break;
+			case 1: StartCoroutine(ShowReady(7.5)); break;
+			case 2: StartCoroutine(ShowReady(8.5)); break;
+			case 3: StartCoroutine(ShowReady(14.5)); break;
+			case 4: StartCoroutine(ShowReady(4.5)); break;
+			case 5: StartCoroutine(ShowReady(8.5)); break;
+			case 6: StartCoroutine(ShowReady(9.5)); break;
+			case 7: StartCoroutine(ShowReady(6.5)); break;
+		}
     return;
 	}
 
@@ -65,7 +83,7 @@ function ShowStart(waitTime : float) {
 	
 	gameObject.GetComponent(Renderer).enabled = true;
 
-	StartCoroutine(TurnOff(1.0));
+	StartCoroutine(TurnOff(0.8));
 }
 
 function ShowReady(waitTime : float) {
