@@ -37,11 +37,12 @@ function Update() {
 }
 
 function InstructionScreen() {
-	Debug.Log("InstructionScreen");
 	var songObject = EventSystem.current.currentSelectedGameObject;
 	var songChoice = GameObject.Find("SongChoice");
 	var songChoiceScript = songChoice.GetComponent(SongChoice);
 	songChoiceScript.songChoice = song;
+
+	Debug.Log("Song Choice: " + song);
 	Debug.Log(songChoiceScript.songChoice);
 	songChoice.DontDestroyOnLoad(songChoice);
 	SceneManager.LoadScene(instruction[song]);

@@ -51,11 +51,22 @@ var startTimes = [
 	6.6
 ];
 
+var endTimes = [
+  76, 
+  90, 
+  69, 
+  53, 
+  45, 
+  43, 
+  71, 
+  49
+];
+
 
 
 static var times : float[] = new float[248];
 static var audioSource : AudioSource;
-static var songIndex = -1;
+var songIndex = -1;
 static var score = 0;
 
 function Start() {
@@ -65,13 +76,13 @@ function Start() {
 		var songChoice = GameObject.Find("SongChoice");
 		var songChoiceScript = songChoice.GetComponent(SongChoice);
 		songIndex = songChoiceScript.songChoice;
-		Debug.Log(songIndex);
     }
 
 	if(gameObject.name.Contains("Start")) {
 		gameObject.GetComponent(Renderer).enabled = false;
 		StartCoroutine(ShowStart(startTimes[songIndex]));		
-		return;
+		StartCoroutine(EndSong(endTimes[songIndex]));
+    return;
 	}
 
 	else if(gameObject.name.Contains("Ready")) {
@@ -107,7 +118,7 @@ function ShowStart(waitTime : float) {
 	yield WaitForSeconds(waitTime);
 	
 	gameObject.GetComponent(Renderer).enabled = true;
-
+  score = 0;
 	StartCoroutine(TurnOff(0.8));
 }
 
@@ -116,6 +127,21 @@ function ShowReady(waitTime : float) {
 	yield WaitForSeconds(waitTime);
 	
 	gameObject.GetComponent(Renderer).enabled = false;
+}
+
+function EndSong(waitTime : float) {
+
+  yield WaitForSeconds(waitTime);
+
+  Debug.Log("Song ending...");
+  var scoreObject = GameObject.Find("ScoreObject");
+  var scoreObjectScript = scoreObject.GetComponent(Score);
+  scoreObjectScript.score = score;
+  scoreObjectScript.songIndex = songIndex;
+  scoreObject.DontDestroyOnLoad(scoreObject);
+
+  // Load score selection screen
+  SceneManager.LoadScene(13);
 }
 
 function TurnOff(waitTime : float) {
@@ -133,7 +159,7 @@ function StartSong() {
         audioSource.Play();
         
         // Read labels for the song
-        times = Read(songIndex);        
+        times = Read(songIndex);      
     }
     else {
         gameObject.SetActive(false);
@@ -203,13 +229,13 @@ function binaryIndexOf(searchTime : float) {
         currentIndex = (minIndex + maxIndex) / 2 | 0;
         currentTime = times[currentIndex];
  
-        if (currentTime < searchTime) {
+        if (currentTime < searchTime && currentTime > 0) {
             if (times[currentIndex+1] > searchTime) {
                 return currentIndex;
             }
             minIndex = currentIndex + 1;
         }
-        else if (currentTime > searchTime) {
+        else if (currentTime > searchTime || currentTime <= 0) {
             maxIndex = currentIndex - 1;
         }
         else {
