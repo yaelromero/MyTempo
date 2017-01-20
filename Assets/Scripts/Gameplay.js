@@ -76,6 +76,7 @@ function Start() {
 		var songChoice = GameObject.Find("SongChoice");
 		var songChoiceScript = songChoice.GetComponent(SongChoice);
 		songIndex = songChoiceScript.songChoice;
+    Debug.Log("SongChoice " + songIndex);
     }
 
 	if(gameObject.name.Contains("Start")) {
@@ -202,6 +203,48 @@ function Star(beatIndex: int) {
       
     var mostRecentLabel = binaryIndexOf(audioSource.time);
     if (mostRecentLabel % 4 == beatIndex) {
+        score += 5;
+        GameObject.Find("Score").GetComponent(UI.Text).text = "" + score;
+        Debug.Log("beat" + beatIndex+1);
+        // Update score text field
+        // Make star bigger/change color
+    }
+}
+
+function Star34(beatIndex: int) {
+    if (!audioSource.isPlaying || audioSource.time < startTimes[songIndex])
+        return;
+      
+    var mostRecentLabel = binaryIndexOf(audioSource.time);
+    if (mostRecentLabel % 3 == beatIndex) {
+        score += 5;
+        GameObject.Find("Score").GetComponent(UI.Text).text = "" + score;
+        Debug.Log("beat" + beatIndex+1);
+        // Update score text field
+        // Make star bigger/change color
+    }
+}
+
+function Star98(beatIndex: int) {
+    if (!audioSource.isPlaying || audioSource.time < startTimes[songIndex])
+        return;
+      
+    var mostRecentLabel = binaryIndexOf(audioSource.time);
+    if (mostRecentLabel % 9 == beatIndex) {
+        score += 5;
+        GameObject.Find("Score").GetComponent(UI.Text).text = "" + score;
+        Debug.Log("beat" + beatIndex+1);
+        // Update score text field
+        // Make star bigger/change color
+    }
+}
+
+function Star128(beatIndex: int) {
+    if (!audioSource.isPlaying || audioSource.time < startTimes[songIndex])
+        return;
+      
+    var mostRecentLabel = binaryIndexOf(audioSource.time);
+    if (mostRecentLabel % 12 == beatIndex) {
         score += 5;
         GameObject.Find("Score").GetComponent(UI.Text).text = "" + score;
         Debug.Log("beat" + beatIndex+1);
