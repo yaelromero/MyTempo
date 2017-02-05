@@ -175,7 +175,7 @@ function Read (songIndex: int) {
     var times : float[] = new float[248];
     try {
         // Create instance of StreamReader to read from a file
-        var sr = new StreamReader(Application.dataPath + "/Audio/Labels/" + songLabels[songIndex]);
+        var sr = new StreamReader(Application.streamingAssetsPath + "/Labels/" + songLabels[songIndex]);
         // Read and get timestamp from the file until the end of the
         // file is reached
         var line = sr.ReadLine();

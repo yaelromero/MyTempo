@@ -20,12 +20,7 @@ function PreviousPage() {
 
 function Exit() {
 	Debug.Log("quit");
-	if(EditorApplication.isPlaying) {
-		EditorApplication.isPlaying = false;
-	}
-	else {
-		Application.Quit();
-	}
+	Application.Quit();
 }
 
 function Start() {
